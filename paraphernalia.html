@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ParaPhernalia — An AR Paranormal Investigation</title>
+<meta name="description" content="ParaPhernalia is a mobile AR paranormal investigation game where your phone's own sensors become the ghost-hunting kit. First published August 2026. An original work by Fellina / Parafuni.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Space+Mono:wght@400;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1F1F1F;
+    --ink-deep:#141312;
+    --pink:#ED536F;
+    --cream:#FFEEEC;
+    --green:#59C08A;      /* the wrong-way shadow */
+    --cyan:#56D5E0;
+    --muted:rgba(255,238,236,.60);
+    --hair:rgba(255,238,236,.14);
+    --maxw:960px;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--ink-deep);
+    color:var(--cream);
+    font-family:"Inter",system-ui,sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  /* ambient duality glow: pink one corner, green the opposite */
+  body::before{
+    content:"";
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    background:
+      radial-gradient(60% 45% at 12% 8%, rgba(237,83,111,.16), transparent 70%),
+      radial-gradient(55% 45% at 90% 96%, rgba(89,192,138,.13), transparent 72%),
+      radial-gradient(120% 120% at 50% 40%, transparent 55%, rgba(0,0,0,.55) 100%);
+  }
+  /* faint grain */
+  body::after{
+    content:"";
+    position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.05;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .wrap{position:relative; z-index:1; max-width:var(--maxw); margin:0 auto; padding:0 28px;}
+
+  /* ---------- HERO ---------- */
+  .hero{min-height:100svh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:64px 0;}
+  .eyebrow{
+    font-family:"Space Mono",monospace; font-size:.72rem; letter-spacing:.28em;
+    text-transform:uppercase; color:var(--muted); margin-bottom:34px;
+  }
+  .eyebrow b{color:var(--pink); font-weight:700;}
+
+  .mark{width:132px; height:132px; margin-bottom:22px;}
+  .win-glow{transform-origin:center;}
+
+  .wordmark{
+    font-family:"Fraunces",serif; font-weight:900; font-optical-sizing:auto;
+    font-size:clamp(2.7rem,9vw,5.4rem); line-height:.95; letter-spacing:-.01em;
+    margin:0; color:var(--cream);
+  }
+  .wordmark .a{color:var(--pink);}   /* Para */
+  .wordmark .b{color:var(--green);}  /* nomalia — the shadow half */
+
+  .tagline{
+    font-family:"Fraunces",serif; font-weight:600; font-size:clamp(1.15rem,3.4vw,1.7rem);
+    margin:26px auto 0; max-width:20ch; color:var(--cream);
+  }
+  .sub{max-width:52ch; margin:20px auto 0; color:var(--muted); font-size:1.02rem;}
+  .whisper{font-family:"Space Mono",monospace; font-size:.8rem; color:var(--pink); margin-top:30px; letter-spacing:.04em;}
+
+  /* ---------- SECTIONS ---------- */
+  section{padding:76px 0; position:relative;}
+  .sec-eyebrow{
+    font-family:"Space Mono",monospace; font-size:.72rem; letter-spacing:.26em;
+    text-transform:uppercase; color:var(--green); margin:0 0 18px;
+    display:flex; align-items:center; gap:12px;
+  }
+  .sec-eyebrow::before{content:""; width:9px; height:9px; border-radius:50%;
+    background:var(--pink); box-shadow:5px -5px 0 -1px var(--green);} /* the wrong-way shadow, in miniature */
+
+  h2{font-family:"Fraunces",serif; font-weight:900; font-size:clamp(1.7rem,5vw,2.6rem);
+    line-height:1.05; margin:0 0 22px; letter-spacing:-.01em;}
+  .lede{font-size:1.08rem; max-width:60ch;}
+  .lede + .lede{margin-top:18px;}
+  em{color:var(--pink); font-style:normal;}
+  .g-em{color:var(--green);}
+
+  .hair{border:0; border-top:1px solid var(--hair); margin:0;}
+
+  /* roles */
+  .roles{display:grid; grid-template-columns:repeat(2,1fr); gap:1px; background:var(--hair);
+    border:1px solid var(--hair); margin-top:38px;}
+  .role{background:var(--ink-deep); padding:30px 26px;}
+  .role h3{font-family:"Fraunces",serif; font-weight:600; font-size:1.3rem; margin:0 0 6px;}
+  .role.skeptic h3{color:var(--cyan);}
+  .role.believer h3{color:var(--pink);}
+  .role.sensitive h3{color:var(--green);}
+  .role.magnet h3{color:var(--cream);}
+  .role p{margin:0; color:var(--muted); font-size:.96rem;}
+  .role .tag{font-family:"Space Mono",monospace; font-size:.66rem; letter-spacing:.2em;
+    text-transform:uppercase; color:rgba(255,238,236,.4); display:block; margin-bottom:14px;}
+
+  /* community */
+  .cta-block{text-align:center; padding-top:20px;}
+  .cta{
+    display:inline-block; margin-top:26px; font-family:"Space Mono",monospace; font-weight:700;
+    font-size:.9rem; letter-spacing:.08em; text-transform:uppercase; text-decoration:none;
+    color:var(--ink-deep); background:var(--pink); padding:16px 30px; border-radius:2px;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .cta:hover{transform:translate(-3px,-3px); box-shadow:5px 5px 0 var(--green);}
+  .cta:focus-visible{outline:3px solid var(--cream); outline-offset:3px;}
+
+  /* ---------- FOOTER / PROVENANCE ---------- */
+  footer{border-top:1px solid var(--hair); padding:52px 0 70px; margin-top:20px;}
+  .prov{font-family:"Space Mono",monospace; font-size:.78rem; color:var(--muted); line-height:1.9;}
+  .prov .stamp{color:var(--green); text-transform:uppercase; letter-spacing:.2em; font-size:.7rem; display:block; margin-bottom:12px;}
+  .prov strong{color:var(--cream); font-weight:700;}
+  .flag{margin-top:22px; font-size:.72rem; color:rgba(255,238,236,.34);}
+
+  @media (max-width:600px){
+    .roles{grid-template-columns:1fr;}
+    section{padding:56px 0;}
+  }
+
+  @media (prefers-reduced-motion:no-preference){
+    .win-glow{animation:flick 5.5s ease-in-out infinite;}
+    @keyframes flick{
+      0%,100%{opacity:.9;} 45%{opacity:.35;} 47%{opacity:.9;} 60%{opacity:.5;} 63%{opacity:.9;}
+    }
+  }
+</style>
+</head>
+<body>
+
+<main class="wrap">
+
+  <!-- ============ HERO ============ -->
+  <header class="hero">
+    <p class="eyebrow">Est. August 2026 &nbsp;·&nbsp; <b>An AR paranormal investigation</b></p>
+
+    <!-- Logo mark: two back-to-back P's inside a house silhouette, window as negative space.
+         Pink P + green "shadow falling the wrong way." First-draft interpretation of your concept. -->
+    <svg class="mark" viewBox="0 0 200 200" role="img" aria-label="ParaPhernalia mark: two back-to-back P's inside a house with a lit window">
+      <!-- house silhouette -->
+      <polygon points="38,82 100,28 162,82 162,172 38,172" fill="none" stroke="var(--cream)" stroke-width="3.5" stroke-linejoin="round" opacity="0.85"/>
+      <!-- window: negative space, a faint lit pane near the eaves -->
+      <rect class="win-glow" x="90" y="52" width="20" height="20" rx="2" fill="none" stroke="var(--pink)" stroke-width="2.5"/>
+      <line class="win-glow" x1="100" y1="52" x2="100" y2="72" stroke="var(--pink)" stroke-width="1.4"/>
+      <line class="win-glow" x1="90" y1="62" x2="110" y2="62" stroke="var(--pink)" stroke-width="1.4"/>
+      <!-- back-to-back P's -->
+      <text x="100" y="158" font-family="Fraunces, serif" font-weight="900" font-size="86" fill="var(--green)" transform="matrix(-1,0,0,1,196,-6)" opacity="0.9">P</text>
+      <text x="100" y="158" font-family="Fraunces, serif" font-weight="900" font-size="86" fill="var(--pink)">P</text>
+    </svg>
+
+    <h1 class="wordmark"><span class="a">Para</span><span class="b">Phernalia</span></h1>
+    <p class="tagline">Real places. Real sensors. Unreal things.</p>
+    <p class="sub">A mobile investigation game where your phone's own sensors become the kit — and the folklore you were warned about hunts the world just outside your door.</p>
+    <p class="whisper">You are a Digital Detective. Probably.</p>
+  </header>
+
+  <hr class="hair">
+
+  <!-- ============ THE CONCEPT ============ -->
+  <section>
+    <p class="sec-eyebrow">The Case</p>
+    <h2>Your neighborhood was always haunted.<br>Now you can prove it.</h2>
+    <p class="lede">ParaPhernalia turns the ordinary hardware in your pocket — the camera, the compass, the accelerometer, the microphone — into an investigator's toolkit. You don't chase invented monsters across a fictional map. You investigate <em>where you actually are</em>, and the things you find are drawn from the world's own folklore: the ones with names, the ones with none, and the ones your grandmother told you never to answer.</p>
+    <p class="lede">How you investigate matters. The careful detective gathers evidence. The careless one becomes it. That's all I'll say here — the rest is <span class="g-em">still in the dark where it belongs.</span></p>
+  </section>
+
+  <hr class="hair">
+
+  <!-- ============ THE ROLES ============ -->
+  <section>
+    <p class="sec-eyebrow">Who You Bring</p>
+    <h2>Four ways to be wrong about a ghost.</h2>
+    <p class="lede">ParaPhernalia is built for a party. Every role sees a different slice of the truth, and none of them is the whole picture — which is exactly why you need each other.</p>
+    <div class="roles">
+      <div class="role skeptic">
+        <span class="tag">The Skeptic</span>
+        <h3>Trusts the readings.</h3>
+        <p>Doubts everything the readings can't explain. Keeps the case honest.</p>
+      </div>
+      <div class="role believer">
+        <span class="tag">The Believer</span>
+        <h3>Sees the pattern.</h3>
+        <p>Finds the shape of it before there's proof. Usually right. Occasionally too soon.</p>
+      </div>
+      <div class="role sensitive">
+        <span class="tag">The Sensitive</span>
+        <h3>Feels what sensors can't.</h3>
+        <p>Reads the room the instruments miss. Pays for it later.</p>
+      </div>
+      <div class="role magnet">
+        <span class="tag">The Magnet</span>
+        <h3>Trouble finds them first.</h3>
+        <p>Whatever's in the house, it wants them. Handy. Not restful.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="hair">
+
+  <!-- ============ THE DETECTIVES ============ -->
+  <section class="cta-block">
+    <p class="sec-eyebrow" style="justify-content:center;">The Community</p>
+    <h2>The Digital Detectives are already comparing notes.</h2>
+    <p class="lede" style="margin:0 auto;">ParaPhernalia is being built in the open, alongside the people who'll play it. Come argue about ley lines, name a PhaNomaly, or just watch the case files pile up.</p>
+    <a class="cta" href="https://discord.gg/TTgamJWS" target="_blank" rel="noopener">Join the Digital Detectives</a>
+  </section>
+
+  <!-- ============ PROVENANCE ============ -->
+  <footer>
+    <div class="prov">
+      <span class="stamp">On the record</span>
+      <strong>ParaPhernalia</strong> — an original work by <strong>Fellina</strong>, a <strong>Parafuni</strong> creation.<br>
+      First published <strong>August 4, 2026</strong> · Oldsmar, Florida.<br>
+      © 2026 Fellina. The ParaPhernalia name, world, characters, roles, and design are original works.
+      <p class="flag">This page exists to plant a flag and a date. Consider it planted.</p>
+    </div>
+  </footer>
+
+</main>
+</body>
+</html>
